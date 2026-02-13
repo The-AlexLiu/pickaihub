@@ -1,0 +1,80 @@
+[
+  {
+    "url": "https://plausible.io/js/script.tagged-events.js",
+    "content_type": "application/javascript",
+    "body_length": 4349,
+    "body_preview": "!function(){var t,e,n,i=document.currentScript,o={};function a(t,e,n){window.fetch&&fetch(t,{method:\"POST\",headers:{\"Content-Type\":\"text/plain\"},keepalive:!0,body:JSON.stringify(e)}).then(function(t){n&&n.callback&&n.callback({status:t.status})}).catch(function(t){n&&n.callback&&n.callback({error:t})})}var r=!1,c=location.href,l={},u=-1,d=0,s=0;function p(){var i=v();if(!t&&(u<n||i>=3e3)){u=n;var r={n:\"engagement\",sd:Math.round(n/e*100),d:o.domain,u:c,p:l,e:i,v:33};d=0,s=0,a(o.endpoint,r)}}function f(){\"visible\"===document.visibilityState&&document.hasFocus()&&0===d?d=Date.now():\"hidden\"!==document.visibilityState&&document.hasFocus()||(s=v(),d=0,p())}function v(){return d?s+(Date.now()-d):s}function m(){var t=document.body||{},e=document.documentElement||{};return Math.max(t.scrollHeight||0,t.offsetHeight||0,t.clientHeight||0,e.scrollHeight||0,e.offsetHeight||0,e.clientHeight||0)}function w(){var t=document.body||{},n=document.documentElement||{},i=window.innerHeight||n.clientHeight||"
+  },
+  {
+    "url": "https://assets.mediadelivery.net/plyr/3.7.8.4-bn/plyr.polyfilled.min.js",
+    "content_type": "application/javascript",
+    "body_length": 121835,
+    "body_preview": "\"object\"==typeof navigator&&function(e,t){\"object\"==typeof exports&&\"undefined\"!=typeof module?module.exports=t():\"function\"==typeof define&&define.amd?define(\"Plyr\",t):(e=\"undefined\"!=typeof globalThis?globalThis:e||self).Plyr=t()}(this,(function(){\"use strict\";!function(){if(\"undefined\"!=typeof window)try{var e=new window.CustomEvent(\"test\",{cancelable:!0});if(e.preventDefault(),!0!==e.defaultPrevented)throw new Error(\"Could not prevent default\")}catch(e){var t=function(e,t){var i,s;return(t=t||{}).bubbles=!!t.bubbles,t.cancelable=!!t.cancelable,(i=document.createEvent(\"CustomEvent\")).initCustomEvent(e,t.bubbles,t.cancelable,t.detail),s=i.preventDefault,i.preventDefault=function(){s.call(this);try{Object.defineProperty(this,\"defaultPrevented\",{get:function(){return!0}})}catch(e){this.defaultPrevented=!0}},i};t.prototype=window.Event.prototype,window.CustomEvent=t}}();var e=\"undefined\"!=typeof globalThis?globalThis:\"undefined\"!=typeof window?window:\"undefined\"!=typeof global?global:\"u"
+  },
+  {
+    "url": "https://assets.mediadelivery.net/plyr-plugin-thumbnail.js",
+    "content_type": "application/javascript",
+    "body_length": 17933,
+    "body_preview": "(function (document) {\n  const getHours = value => Math.trunc((value / 60 / 60) % 60, 10);\n  const getMinutes = value => Math.trunc((value / 60) % 60, 10);\n  const getSeconds = value => Math.trunc(value % 60, 10);\n\n  function isNumber (obj) {\n    var type = typeof obj;\n    return (type === \"number\" || type === \"string\") &&\n      !isNaN(obj - parseFloat(obj));\n  }\n\n  // Format time to UI friendly string\n  function formatTime (time = 0, displayHours = false, inverted = false) {\n    // Bail if the value isn't a number\n    if (!isNumber(time)) {\n      return formatTime(null, displayHours, inverted);\n    }\n\n    // Format time component to add leading zero\n    const format = value => `0${value}`.slice(-2);\n\n    // Breakdown to hours, mins, secs\n    let hours = getHours(time);\n    const mins = getMinutes(time);\n    const secs = getSeconds(time);\n\n    // Do we need to display hours?\n    if (displayHours || hours > 0) {\n      hours = `${hours}:`;\n    } else {\n      hours = '';\n    }\n\n    // Ren"
+  },
+  {
+    "url": "https://assets.mediadelivery.net/session-tracker/1.1.2/session-tracker.js",
+    "content_type": "application/javascript",
+    "body_length": 3877,
+    "body_preview": "var BunnyStreamSessionTracker = /** @class */ (function () {\n    /*\n     *\n     **/\n    function BunnyStreamSessionTracker(iframeDomain, videoApiHostname, videoLibraryId, videoId, serverId) {\n        if (serverId === void 0) { serverId = \"\"; }\n        this.untrackedTime = 0;\n        this.timeToFirstFrameTracked = false;\n        this.timeToFirstFrameCollected = false;\n        this.timeToFirstFrameMs = 0;\n        this.playEventTimeMs = 0;\n        this.VideoId = videoId;\n        this.ServerId = serverId;\n        this.currentVideoProgress = 0;\n        this.videoLibraryId = videoLibraryId;\n        this.IframeDomain = iframeDomain;\n        this.VideoApiHostname = videoApiHostname;\n    }\n    BunnyStreamSessionTracker.prototype.OnPlay = function () {\n        this.startTime = this.GetUnix();\n        this.playing = true;\n        this.playEventTimeMs = new Date().getTime();\n        // Fire the collection handler if the video was just played for the first time\n        if (!this.firstPlayTracked) {"
+  },
+  {
+    "url": "https://assets.mediadelivery.net/hls/1.6.6/hls.min.js",
+    "content_type": "application/javascript",
+    "body_length": 529044,
+    "body_preview": "!function e(t){var r,i;r=this,i=function(){\"use strict\";function r(e,t){for(var r=0;r<t.length;r++){var i=t[r];i.enumerable=i.enumerable||!1,i.configurable=!0,\"value\"in i&&(i.writable=!0),Object.defineProperty(e,f(i.key),i)}}function i(e,t,i){return t&&r(e.prototype,t),i&&r(e,i),Object.defineProperty(e,\"prototype\",{writable:!1}),e}function n(e,t,r){return(t=f(t))in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function a(){return a=Object.assign?Object.assign.bind():function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var i in r)({}).hasOwnProperty.call(r,i)&&(e[i]=r[i])}return e},a.apply(null,arguments)}function s(e){return s=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},s(e)}function o(e,t){e.prototype=Object.create(t.prototype),e.prototype.constructor=e,h(e,t)}function l(){try{var e=!Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){})))}"
+  },
+  {
+    "url": "https://assets.mediadelivery.net/jquery/jquery-3.7.1.min.js",
+    "content_type": "application/javascript",
+    "body_length": 87533,
+    "body_preview": "/*! jQuery v3.7.1 | (c) OpenJS Foundation and other contributors | jquery.org/license */\n!function(e,t){\"use strict\";\"object\"==typeof module&&\"object\"==typeof module.exports?module.exports=e.document?t(e,!0):function(e){if(!e.document)throw new Error(\"jQuery requires a window with a document\");return t(e)}:t(e)}(\"undefined\"!=typeof window?window:this,function(ie,e){\"use strict\";var oe=[],r=Object.getPrototypeOf,ae=oe.slice,g=oe.flat?function(e){return oe.flat.call(e)}:function(e){return oe.concat.apply([],e)},s=oe.push,se=oe.indexOf,n={},i=n.toString,ue=n.hasOwnProperty,o=ue.toString,a=o.call(Object),le={},v=function(e){return\"function\"==typeof e&&\"number\"!=typeof e.nodeType&&\"function\"!=typeof e.item},y=function(e){return null!=e&&e===e.window},C=ie.document,u={type:!0,src:!0,nonce:!0,noModule:!0};function m(e,t,n){var r,i,o=(n=n||C).createElement(\"script\");if(o.text=e,t)for(r in u)(i=t[r]||t.getAttribute&&t.getAttribute(r))&&o.setAttribute(r,i);n.head.appendChild(o).parentNode.remove"
+  },
+  {
+    "url": "https://assets.mediadelivery.net/playerjs/0.1.1/player-0.1.1.min.js",
+    "content_type": "application/javascript",
+    "body_length": 13693,
+    "body_preview": "((i,r)=>{var d={DEBUG:!1,VERSION:\"0.0.11\",CONTEXT:\"player.js\"};d.POST_MESSAGE=!!i.postMessage,d.origin=function(e){return(e=\"//\"===e.substr(0,2)?i.location.protocol+e:e).split(\"/\").slice(0,3).join(\"/\")},d.addEvent=function(e,t,n){e&&(e.addEventListener?e.addEventListener(t,n,!1):e.attachEvent?e.attachEvent(\"on\"+t,n):e[\"on\"+t]=n)},d.log=function(){d.log.history=d.log.history||[],d.log.history.push(arguments),i.console&&d.DEBUG&&i.console.log(Array.prototype.slice.call(arguments))},d.isString=function(e){return\"[object String]\"===Object.prototype.toString.call(e)},d.isObject=function(e){return\"[object Object]\"===Object.prototype.toString.call(e)},d.isArray=function(e){return\"[object Array]\"===Object.prototype.toString.call(e)},d.isNone=function(e){return null==e},d.has=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},d.indexOf=function(e,t){if(null!=e){var n=0,i=e.length;if(Array.prototype.IndexOf&&e.indexOf===Array.prototype.IndexOf)return e.indexOf(t);for(;n<i;n++)if(e[n"
+  },
+  {
+    "url": "https://assets.mediadelivery.net/plyr-position.js",
+    "content_type": "application/javascript",
+    "body_length": 2593,
+    "body_preview": "function initPlyrPositionSaver(player, videoId) {\n    const STORAGE_KEY_PREFIX = 'plyr-video-position-';\n    const END_THRESHOLD = 3;\n    const SAVE_INTERVAL_MS = 1000;\n\n    var seeked = false;\n\n    function getStorageKey() {\n        return STORAGE_KEY_PREFIX + videoId;\n    }\n\n    function savePosition(currentTime) {\n        // Don't save when current position is less then 1 second from the start\n        if (currentTime < 1) {\n            return;\n        }\n\n        // If we have a valid duration and the currentTime is within END_THRESHOLD seconds from the end,\n        // then delete the saved position instead of updating it.\n        if (player.duration && currentTime >= player.duration - END_THRESHOLD) {\n            localStorage.removeItem(getStorageKey());\n            return;\n        }\n        const entry = {\n            currentTime,\n            timestamp: Date.now()\n        };\n        localStorage.setItem(getStorageKey(), JSON.stringify(entry));\n    }\n\n    // Load the saved position "
+  },
+  {
+    "url": "https://assets.mediadelivery.net/pb.js?v=1",
+    "content_type": "application/javascript",
+    "body_length": 25592,
+    "body_preview": "var PB = /** @class */ (function () {\r\n    /**\r\n     * Create a new progress bar object\r\n     * @param element\r\n     */\r\n    function PB(element, progressBarElement, config) {\r\n        this.mouse_over_progressbar = false;\r\n        this.title_jumped = false;\r\n        this.sections = new Array();\r\n        this.moments = new Array();\r\n        this.el_pbar = $(progressBarElement);\r\n        this.el_body = $(element);\r\n        this.el_body.css(\"pointer-events\", \"none\");\r\n        this.video_length = config.videoLength;\r\n        this.ev_config = config;\r\n        this.c_width = this.el_body.width() - 1;\r\n        this.createElements();\r\n        this.startResizeMonitoring();\r\n    }\r\n    PB.prototype.createElements = function () {\r\n        this.el_base = $('<div class=\"sp__base\"></div>');\r\n        this.el_root = $('<ul class=\"sp__progressbar\"></div>');\r\n        this.el_title = $('<div class=\"sp__title\">test</div>');\r\n        this.el_base.append(this.el_root);\r\n        this.el_base.append(this.el_t"
+  },
+  {
+    "url": "https://assets.mediadelivery.net/playerjs/pjs-implementation.js",
+    "content_type": "application/javascript",
+    "body_length": 3557,
+    "body_preview": "var BunnyPlayerJs = /** @class */ (function () {\n    function BunnyPlayerJs(player) {\n        var _this = this;\n        this.init = function () {\n            // @ts-ignore\n            // this is due to TS not recognizing external types\n            _this.receiver = new playerjs.Receiver();\n            _this.receiver.on(\"play\", function () {\n                _this.playerInstance.play();\n                _this.receiver.emit(\"play\");\n            });\n            _this.receiver.on(\"pause\", function () {\n                _this.playerInstance.pause();\n                _this.receiver.emit(\"pause\");\n            });\n            _this.receiver.on(\"getDuration\", function (callback) {\n                return callback(_this.playerInstance.duration);\n            });\n            _this.receiver.on(\"getCurrentTime\", function (callback) {\n                return callback(_this.playerInstance.currentTime);\n            });\n            _this.receiver.on(\"setCurrentTime\", function (value) { return (_this.playerInst"
+  },
+  {
+    "url": "https://assets.mediadelivery.net/chartist.min.js",
+    "content_type": "application/javascript",
+    "body_length": 40351,
+    "body_preview": "/* Chartist.js 0.11.4\n * Copyright © 2019 Gion Kunz\n * Free to use under either the WTFPL license or the MIT license.\n * https://raw.githubusercontent.com/gionkunz/chartist-js/master/LICENSE-WTFPL\n * https://raw.githubusercontent.com/gionkunz/chartist-js/master/LICENSE-MIT\n */\n\n!function(a,b){\"function\"==typeof define&&define.amd?define(\"Chartist\",[],function(){return a.Chartist=b()}):\"object\"==typeof module&&module.exports?module.exports=b():a.Chartist=b()}(this,function(){var a={version:\"0.11.4\"};return function(a,b){\"use strict\";var c=a.window,d=a.document;b.namespaces={svg:\"http://www.w3.org/2000/svg\",xmlns:\"http://www.w3.org/2000/xmlns/\",xhtml:\"http://www.w3.org/1999/xhtml\",xlink:\"http://www.w3.org/1999/xlink\",ct:\"http://gionkunz.github.com/chartist-js/ct\"},b.noop=function(a){return a},b.alphaNumerate=function(a){return String.fromCharCode(97+a%26)},b.extend=function(a){var c,d,e;for(a=a||{},c=1;c<arguments.length;c++){d=arguments[c];for(var f in d)e=d[f],\"object\"!=typeof e||null="
+  },
+  {
+    "url": "https://assets.mediadelivery.net/plyr-vr.js",
+    "content_type": "application/javascript",
+    "body_length": 1509110,
+    "body_preview": "/*! @name plyr-vr @version 0.0.3 @license Apache-2.0 */\n(function (global, factory) {\n  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('global/window'), require('global/document'), require('plyr')) :\n  typeof define === 'function' && define.amd ? define('PlyrVr', ['global/window', 'global/document', 'plyr'], factory) :\n  (global = global || self, global.PlyrVr = factory(global.window, global.document, global.Plyr));\n}(this, (function (window$1, document$1, Plyr) { 'use strict';\n\n  window$1 = window$1 && window$1.hasOwnProperty('default') ? window$1['default'] : window$1;\n  document$1 = document$1 && document$1.hasOwnProperty('default') ? document$1['default'] : document$1;\n  Plyr = Plyr && Plyr.hasOwnProperty('default') ? Plyr['default'] : Plyr;\n\n  function _typeof(obj) {\n    if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") {\n      _typeof = function (obj) {\n        return typeof obj;\n      };\n    } else {\n      _"
+  },
+  {
+    "url": "https://accounts.google.com/gsi/client",
+    "content_type": "application/javascript; charset=utf-8",
+    "body_length": 251128,
+    "body_preview": "\"use strict\";this.default_gsi=this.default_gsi||{};(function(_){var window=this;\ntry{\n_._F_toggles_initialize=function(a){(typeof globalThis!==\"undefined\"?globalThis:typeof self!==\"undefined\"?self:this)._F_toggles_default_gsi=a||[]};(0,_._F_toggles_initialize)([0x800000, 0x129804, 0x10, ]);\nvar ba,ca,da,t,ea,ka,la,na;_.aa=typeof Object.create==\"function\"?Object.create:function(a){var b=function(){};b.prototype=a;return new b};ba=typeof Object.defineProperties==\"function\"?Object.defineProperty:function(a,b,c){if(a==Array.prototype||a==Object.prototype)return a;a[b]=c.value;return a};\nca=function(a){a=[\"object\"==typeof globalThis&&globalThis,a,\"object\"==typeof window&&window,\"object\"==typeof self&&self,\"object\"==typeof global&&global];for(var b=0;b<a.length;++b){var c=a[b];if(c&&c.Math==Math)return c}throw Error(\"a\");};da=ca(this);t=function(a,b){if(b)a:{var c=da;a=a.split(\".\");for(var d=0;d<a.length-1;d++){var e=a[d];if(!(e in c))break a;c=c[e]}a=a[a.length-1];d=c[a];b=b(d);b!=d&&b!=nul"
+  }
+]
