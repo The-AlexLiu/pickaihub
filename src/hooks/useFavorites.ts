@@ -15,6 +15,7 @@ export function useFavorites() {
     },
     enabled: !!user,
     staleTime: 1000 * 60 * 5, // 5 mins
+    // initialData is handled by FavoritesProvider seeding the cache
   });
 
   const addFavorite = useMutation({

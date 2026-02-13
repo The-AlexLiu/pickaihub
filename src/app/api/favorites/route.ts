@@ -33,7 +33,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { tool_id } = await request.json();
+  let tool_id: string;
+
+  try {
+    const body = await request.json();
+    tool_id = body.tool_id;
+  } catch (e) {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
 
   if (!tool_id) {
     return NextResponse.json({ error: "Missing tool_id" }, { status: 400 });

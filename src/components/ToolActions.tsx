@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useRouter } from "next/navigation";
-import { Heart } from "lucide-react";
+import { Heart, Loader2 } from "lucide-react";
 
 interface ToolActionsProps {
   toolId: string;
@@ -19,12 +19,15 @@ export default function ToolActions({ toolId, toolUrl, toolName }: ToolActionsPr
   const [copied, setCopied] = useState(false);
 
   const favorited = isFavorited(toolId);
+  const isPending = addFavorite.isPending || removeFavorite.isPending;
 
   const handleFavorite = () => {
     if (!user) {
       router.push("/signup");
       return;
     }
+    if (isPending) return;
+    
     if (favorited) {
       removeFavorite.mutate(toolId);
     } else {
@@ -67,13 +70,18 @@ export default function ToolActions({ toolId, toolUrl, toolName }: ToolActionsPr
       {/* Save / Favorite */}
       <button
         onClick={handleFavorite}
+        disabled={isPending}
         className={`inline-flex items-center justify-center gap-2 rounded-xl border px-6 py-3.5 text-base font-medium transition-all duration-200 ${
           favorited
             ? "border-pink-500/30 bg-pink-500/10 text-pink-400 hover:bg-pink-500/20"
             : "border-white/10 bg-white/5 text-white hover:bg-white/10 hover:border-white/20"
-        }`}
+        } ${isPending ? "opacity-70 cursor-not-allowed" : ""}`}
       >
-        <Heart className={`h-5 w-5 ${favorited ? "fill-pink-400" : ""}`} />
+        {isPending ? (
+          <Loader2 className="h-5 w-5 animate-spin" />
+        ) : (
+          <Heart className={`h-5 w-5 ${favorited ? "fill-pink-400" : ""}`} />
+        )}
         {favorited ? "Saved" : "Save"}
       </button>
 

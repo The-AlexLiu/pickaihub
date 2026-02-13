@@ -62,15 +62,6 @@ export default function ToolList({ tools }: ToolListProps) {
         ))}
       </div>
 
-      {/* Load more */}
-      {tools.length > 0 && (
-        <div className="mt-8 text-center">
-          <button className="rounded-xl border border-white/10 bg-white/[0.03] px-8 py-3 text-sm font-medium text-white/50 transition-all duration-200 hover:border-violet-500/30 hover:bg-violet-500/5 hover:text-violet-400">
-            Load More
-          </button>
-        </div>
-      )}
-
       {tools.length === 0 && (
         <div className="py-20 text-center">
           <div className="mb-4 text-5xl">🔍</div>

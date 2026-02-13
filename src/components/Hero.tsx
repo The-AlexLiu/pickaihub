@@ -3,138 +3,240 @@
 import { useDebouncedCallback } from "use-debounce";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { X, Sparkles, Search } from "lucide-react";
+import { motion } from "framer-motion";
+import BackgroundBeams from "./BackgroundBeams";
+import AnimatedNumber from "./AnimatedNumber";
 
 interface HeroProps {
   totalTools: number;
+  onSearchChange?: (query: string) => void;
+  searchValue?: string;
 }
 
-export default function Hero({ totalTools }: HeroProps) {
+export default function Hero({ totalTools, onSearchChange, searchValue = "" }: HeroProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState("");
+  // We use local state for immediate UI feedback, but sync with parent/URL
+  const [searchQuery, setSearchQuery] = useState(searchValue);
+  const [placeholder, setPlaceholder] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(150);
 
-  // Sync local state with URL param on mount
+  // Sync internal state if parent prop changes (e.g. from URL initially)
   useEffect(() => {
-    const q = searchParams.get("q");
-    if (q) setSearchQuery(q);
-  }, [searchParams]);
+    setSearchQuery(searchValue);
+  }, [searchValue]);
 
-  // Debounce URL updates
-  const debouncedUpdateUrl = useDebouncedCallback((query: string) => {
+  const placeholders = [
+    "Search AI tools...",
+    "Try 'Image Generation'...",
+    "Try 'Coding Assistant'...",
+    "Try 'Video Editor'...",
+    "Try 'ChatGPT'...",
+  ];
+
+  // Typewriter effect logic
+  useEffect(() => {
+    const i = loopNum % placeholders.length;
+    const fullText = placeholders[i];
+
+    const handleTyping = () => {
+      setPlaceholder(
+        isDeleting
+          ? fullText.substring(0, placeholder.length - 1)
+          : fullText.substring(0, placeholder.length + 1)
+      );
+
+      setTypingSpeed(isDeleting ? 30 : 150);
+
+      if (!isDeleting && placeholder === fullText) {
+        setTimeout(() => setIsDeleting(true), 1500); // Pause at end
+      } else if (isDeleting && placeholder === "") {
+        setIsDeleting(false);
+        setLoopNum(loopNum + 1);
+      }
+    };
+
+    const timer = setTimeout(handleTyping, typingSpeed);
+
+    return () => clearTimeout(timer);
+  }, [placeholder, isDeleting, loopNum, typingSpeed, placeholders]);
+
+  // Handle Input Change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchQuery(val);
+    
+    // Notify parent for instant filtering
+    if (onSearchChange) {
+        onSearchChange(val);
+    }
+  };
+
+  // Keep the router push for "Enter" key or explicit search button click
+  // This allows deep linking and server-side fallback
+  const handleSubmitSearch = () => {
     const params = new URLSearchParams(searchParams.toString());
-    if (query) {
-      params.set("q", query);
+    if (searchQuery) {
+      params.set("q", searchQuery);
     } else {
       params.delete("q");
     }
     router.replace(`/?${params.toString()}`);
-  }, 500);
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    debouncedUpdateUrl(query);
+  };
+  
+  const clearSearch = () => {
+    setSearchQuery("");
+    if (onSearchChange) onSearchChange("");
+    
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("q");
+    router.replace(`/?${params.toString()}`);
   };
 
-  const totalToolsFormatted = totalTools.toLocaleString();
-
   const stats = [
-    { value: `${totalToolsFormatted}+`, label: "AI Tools Collected" },
-    { value: "13", label: "Categories" },
-    { value: "500k+", label: "Monthly Visits" },
+    { value: totalTools, suffix: "+", label: "AI Tools Collected" },
+    { value: 13, suffix: "", label: "Categories" },
+    { value: 500, suffix: "k+", label: "Monthly Visits" },
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#0a0a12] via-[#0d0d1a] to-[#0a0a12] py-20 sm:py-28">
-      {/* Animated background */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-violet-600/10 blur-[128px]" />
-        <div className="absolute right-1/4 bottom-1/4 h-96 w-96 rounded-full bg-cyan-500/10 blur-[128px]" />
-        <div className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/5 blur-[96px]" />
-      </div>
-
-      {/* Grid pattern */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: "64px 64px",
-        }}
-      />
+    <section className="relative overflow-hidden bg-[#0a0a12] py-24 sm:py-32">
+      <BackgroundBeams />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 relative z-10">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/20 bg-violet-500/10 px-4 py-2 text-sm text-violet-300 mb-8 backdrop-blur-sm">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 rounded-full border border-violet-500/20 bg-violet-500/10 px-4 py-2 text-sm text-violet-300 mb-8 backdrop-blur-sm"
+          >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
             </span>
-            {totalToolsFormatted}+ AI Tools Collected
-          </div>
+            <span className="font-medium">
+              {totalTools.toLocaleString()}+ AI Tools Collected
+            </span>
+          </motion.div>
 
           {/* Title */}
-          <h1 className="bg-gradient-to-r from-white via-white to-white/60 bg-clip-text text-5xl font-bold tracking-tight text-transparent sm:text-6xl mb-6">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="bg-gradient-to-r from-white via-white to-white/60 bg-clip-text text-5xl font-bold tracking-tight text-transparent sm:text-7xl mb-6 leading-[1.1]"
+          >
             Find the Best AI Tools <br />
-            <span className="text-violet-400">For Any Task</span>
-          </h1>
+            <motion.span 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400"
+            >
+              For Any Task
+            </motion.span>
+          </motion.h1>
 
-          <p className="mb-10 text-lg text-white/50">
-            A curated directory of artificial intelligence tools to boost your productivity. Daily updates with the latest releases.
-          </p>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mb-12 text-lg text-white/50 max-w-2xl mx-auto leading-relaxed"
+          >
+            A curated directory of artificial intelligence tools to boost your productivity. Daily updates with the latest releases from around the world.
+          </motion.p>
 
           {/* Search */}
-          <div className="relative mx-auto max-w-2xl group">
-            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 opacity-30 blur transition duration-500 group-hover:opacity-50"></div>
-            <div className="relative flex items-center rounded-xl bg-[#13131f] p-2 ring-1 ring-white/10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="relative mx-auto max-w-2xl group"
+          >
+            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-violet-600 via-cyan-500 to-indigo-600 opacity-30 blur-lg transition duration-500 group-hover:opacity-60 group-hover:blur-xl"></div>
+            <div className="relative flex items-center rounded-xl bg-[#0a0a12]/90 p-2 ring-1 ring-white/10 backdrop-blur-xl transition-all duration-300 focus-within:ring-violet-500/50">
               <div className="flex-1">
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-white/40">
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
+                    <Search className="w-5 h-5" />
                   </div>
                   <input
                     type="text"
-                    className="w-full bg-transparent border-0 py-3 pl-11 pr-4 text-white placeholder-white/40 focus:ring-0 sm:text-lg"
-                    placeholder="Search AI tools (e.g. 'chat', 'image generation')..."
+                    className="w-full bg-transparent border-0 py-4 pl-12 pr-10 text-white placeholder-white/40 focus:ring-0 text-lg"
+                    placeholder={placeholder}
                     value={searchQuery}
-                    onChange={(e) => handleSearch(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSearch(searchQuery)}
+                    onChange={handleInputChange}
+                    onKeyDown={(e) => e.key === "Enter" && handleSubmitSearch()}
                   />
+                  {searchQuery && (
+                    <button
+                      onClick={clearSearch}
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-white/40 hover:text-white transition-colors"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  )}
                 </div>
               </div>
               <button
-                onClick={() => handleSearch(searchQuery)}
-                className="ml-2 rounded-lg bg-violet-600 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-violet-500 hover:shadow-lg hover:shadow-violet-500/25"
+                onClick={handleSubmitSearch}
+                className="ml-2 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all hover:shadow-violet-500/40 hover:scale-[1.02] active:scale-[0.98]"
               >
                 Search
               </button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Quick search tags */}
-          <div className="mt-8 flex flex-wrap justify-center gap-2 text-sm text-white/40">
-            <span>Popular:</span>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="mt-8 flex flex-wrap justify-center gap-3 text-sm"
+          >
+            <span className="text-white/40">Popular:</span>
             {["ChatGPT", "Midjourney", "Copy.ai", "Notion AI"].map((tag) => (
               <button
                 key={tag}
-                onClick={() => handleSearch(tag)}
-                className="hover:text-white hover:underline transition-colors"
+                onClick={() => {
+                    setSearchQuery(tag);
+                    if (onSearchChange) onSearchChange(tag);
+                    // Also trigger URL update for deep linking context
+                    const params = new URLSearchParams(searchParams.toString());
+                    params.set("q", tag);
+                    router.replace(`/?${params.toString()}`);
+                }}
+                className="text-white/60 hover:text-violet-300 transition-colors bg-white/5 hover:bg-white/10 px-3 py-1 rounded-full border border-white/5 hover:border-violet-500/30"
               >
                 {tag}
               </button>
             ))}
-          </div>
+          </motion.div>
 
           {/* Stats */}
-          <div className="mt-16 grid grid-cols-3 gap-8 border-t border-white/5 pt-8 sm:w-full sm:max-w-3xl sm:mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="mt-20 grid grid-cols-3 gap-8 border-t border-white/5 pt-10 sm:w-full sm:max-w-3xl sm:mx-auto"
+          >
             {stats.map((stat) => (
-              <div key={stat.label}>
-                <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-sm text-white/40">{stat.label}</div>
+              <div key={stat.label} className="relative group">
+                <div className="absolute -inset-4 rounded-xl bg-white/5 opacity-0 transition duration-300 group-hover:opacity-100 blur-xl"></div>
+                <div className="relative">
+                  <div className="text-4xl font-bold text-white mb-2 tracking-tight">
+                    <AnimatedNumber value={stat.value} suffix={stat.suffix} />
+                  </div>
+                  <div className="text-sm font-medium text-white/40 uppercase tracking-wider">{stat.label}</div>
+                </div>
               </div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

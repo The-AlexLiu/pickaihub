@@ -1,3 +1,4 @@
+import { Star, ExternalLink, Image as ImageIcon, CheckCircle, Zap } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ToolCard from "@/components/ToolCard";
@@ -5,26 +6,12 @@ import ToolActions from "@/components/ToolActions";
 import { getTool, getRelatedTools } from "@/lib/queries";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Metadata } from "next";
+import Image from "next/image";
 
 interface ToolPageProps {
   params: Promise<{
     id: string;
   }>;
-}
-
-export async function generateMetadata({ params }: ToolPageProps): Promise<Metadata> {
-  const { id } = await params;
-  const tool = await getTool(id);
-
-  if (!tool) {
-    return { title: "Tool Not Found | PickAIHub" };
-  }
-
-  return {
-    title: `${tool.name} — ${tool.category_label} AI Tool | PickAIHub`,
-    description: tool.description,
-  };
 }
 
 export default async function ToolPage({ params }: ToolPageProps) {
@@ -67,9 +54,15 @@ export default async function ToolPage({ params }: ToolPageProps) {
           <div className="lg:col-span-2">
             {/* Hero Section */}
             <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-start">
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-white/10 to-white/5 shadow-inner border border-white/5 overflow-hidden">
+              <div className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-white/10 to-white/5 shadow-inner border border-white/5 overflow-hidden">
                 {tool.logo && tool.logo.startsWith("http") ? (
-                  <img src={tool.logo} alt={tool.name} className="h-full w-full object-cover" />
+                  <Image 
+                    src={tool.logo} 
+                    alt={tool.name} 
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
                 ) : (
                   <span className="text-3xl">🤖</span>
                 )}
@@ -102,49 +95,78 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
             {/* Stats Cards */}
             <div className="mb-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 text-center">
-                <div className="mb-1 text-2xl font-bold text-white">{tool.rating}</div>
-                <div className="flex items-center justify-center gap-0.5 mb-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <svg
-                      key={i}
-                      className={`h-3.5 w-3.5 ${i < Math.round(tool.rating) ? "text-amber-400" : "text-white/10"}`}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
+              <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 text-center group hover:bg-white/[0.04] transition-colors">
+                <div className="mb-1 text-2xl font-bold text-white flex items-center justify-center gap-1.5">
+                    {tool.rating} <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                 </div>
-                <p className="text-xs text-white/30">Rating</p>
+                <p className="text-xs text-white/30 group-hover:text-white/50 transition-colors">Rating</p>
               </div>
 
-              <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 text-center">
+              <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 text-center group hover:bg-white/[0.04] transition-colors">
                 <div className="mb-1 text-2xl font-bold text-white">{tool.visits}</div>
-                <p className="text-xs text-white/30">Monthly Visits</p>
+                <p className="text-xs text-white/30 group-hover:text-white/50 transition-colors">Monthly Visits</p>
               </div>
 
-              <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 text-center">
-                <div className="mb-1 text-2xl font-bold text-white">{tool.pricing_label}</div>
-                <p className="text-xs text-white/30">Pricing</p>
+              <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 text-center group hover:bg-white/[0.04] transition-colors">
+                <div className="mb-1 text-2xl font-bold text-white capitalize">{tool.pricing}</div>
+                <p className="text-xs text-white/30 group-hover:text-white/50 transition-colors">Model</p>
               </div>
 
-              <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 text-center">
+              <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 text-center group hover:bg-white/[0.04] transition-colors">
                 <div className="mb-1 text-2xl font-bold text-white">
                   {new Date(tool.launch_date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
                 </div>
-                <p className="text-xs text-white/30">Launched</p>
+                <p className="text-xs text-white/30 group-hover:text-white/50 transition-colors">Launched</p>
               </div>
             </div>
+            
+            {/* Screenshots Gallery (New) */}
+            {tool.screenshots && tool.screenshots.length > 0 && (
+              <div className="mb-10">
+                <h2 className="mb-6 text-xl font-bold text-white flex items-center gap-2">
+                   <ImageIcon className="text-violet-400 h-5 w-5" /> Gallery
+                </h2>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {tool.screenshots.map((shot, idx) => (
+                    <div key={idx} className="relative aspect-video overflow-hidden rounded-xl border border-white/10 bg-black/20 group cursor-pointer">
+                      <Image 
+                        src={shot} 
+                        alt={`${tool.name} screenshot ${idx + 1}`}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* About Section */}
             <div className="mb-10 rounded-2xl border border-white/5 bg-white/[0.02] p-6 sm:p-8">
               <h2 className="mb-4 text-xl font-bold text-white flex items-center gap-2">
                 <span className="text-violet-400">📝</span> About {tool.name}
               </h2>
-              <p className="text-white/60 leading-relaxed text-[15px]">
+              <p className="text-white/60 leading-relaxed text-[15px] whitespace-pre-wrap">
                 {tool.description}
               </p>
+              
+              {/* Key Features (New) */}
+              {tool.features && tool.features.length > 0 && (
+                <div className="mt-8 pt-8 border-t border-white/5">
+                  <h3 className="mb-4 text-lg font-semibold text-white flex items-center gap-2">
+                     <Zap className="text-amber-400 h-4 w-4" /> Key Features
+                  </h3>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {tool.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-start gap-3 rounded-lg bg-white/5 p-3 text-sm text-white/70">
+                        <CheckCircle className="h-4 w-4 shrink-0 text-emerald-400 mt-0.5" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Tags */}
@@ -187,7 +209,12 @@ export default async function ToolPage({ params }: ToolPageProps) {
                   <div className="h-px bg-white/5" />
                   <div className="flex items-center justify-between">
                     <span className="text-white/40">Pricing</span>
-                    <span className="text-white/70">{tool.pricing_label}</span>
+                    <div className="text-right">
+                        <span className="block text-white/70">{tool.pricing_label}</span>
+                        {tool.price_detail && (
+                            <span className="block text-xs text-white/40 mt-0.5">{tool.price_detail}</span>
+                        )}
+                    </div>
                   </div>
                   <div className="h-px bg-white/5" />
                   <div className="flex items-center justify-between">
@@ -196,9 +223,10 @@ export default async function ToolPage({ params }: ToolPageProps) {
                       href={tool.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-violet-400 hover:text-violet-300 transition-colors truncate max-w-[160px]"
+                      className="text-violet-400 hover:text-violet-300 transition-colors truncate max-w-[160px] flex items-center gap-1"
                     >
                       {new URL(tool.url).hostname.replace("www.", "")}
+                      <ExternalLink className="h-3 w-3" />
                     </a>
                   </div>
                 </div>

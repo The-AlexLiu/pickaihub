@@ -16,16 +16,27 @@ export const metadata: Metadata = {
 
 // ... imports
 import Providers from "@/components/Providers";
+import FavoritesProvider from "@/components/FavoritesProvider";
+import { getUserFavoriteIds } from "@/lib/queries";
 
-export default function RootLayout({
+import { GoogleAnalytics } from '@next/third-parties/google';
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialFavorites = await getUserFavoriteIds();
+
   return (
     <html lang="zh-CN">
       <body className={`${inter.variable} antialiased`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <FavoritesProvider initialFavorites={initialFavorites}>
+            {children}
+          </FavoritesProvider>
+        </Providers>
+        <GoogleAnalytics gaId="G-RQVPERT200" />
       </body>
     </html>
   );
